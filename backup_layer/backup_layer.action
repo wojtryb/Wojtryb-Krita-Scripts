@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ActionCollection version="2" name="Scripts">
+    <Actions category="Scripts">
+        <text>wojtryb Scripts</text>
+
+        <Action name="Backup Layer">
+        <text>Backup Layer</text>
+        <activationFlags>1</activationFlags>
+        <activationConditions>1</activationConditions>
+        </Action>
+
+    </Actions>
+</ActionCollection>
