@@ -77,12 +77,19 @@ class WojtrybKritaScripts(Extension):
 
     @staticmethod
     def project_to_layers_below():
+        DUPLICATE_NAME = "_projection_to_merge"
+
         document = Krita.instance().activeDocument()
         root = document.activeNode().parentNode()
         nodes = root.childNodes()
 
+        def duplicate(node):
+            copy = node.duplicate()
+            copy.setName(DUPLICATE_NAME)
+            return copy
+
         projection = nodes[-1]
-        projection_copy = projection.duplicate()
+        projection_copy = duplicate(projection)
 
         def do_it(top, middle, bottom):
             document.setActiveNode(middle)
@@ -91,9 +98,8 @@ class WojtrybKritaScripts(Extension):
             Krita.instance().action('clear').trigger()
             Krita.instance().action('deselect').trigger()
 
-            document.waitForDone()
-            duplicate = top.duplicate()
-            root.addChildNode(duplicate, bottom)
+            copy = duplicate(top)
+            root.addChildNode(copy, bottom)
 
         Krita.instance().action('deselect').trigger()
         for i in range(2):
