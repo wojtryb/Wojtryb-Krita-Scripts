@@ -75,6 +75,35 @@ class WojtrybKritaScripts(Extension):
         while groups:
             collapse_in_group(groups.pop())
 
+    @staticmethod
+    def project_to_layers_below():
+        document = Krita.instance().activeDocument()
+        root = document.activeNode().parentNode()
+        nodes = root.childNodes()
+
+        projection = nodes[-1]
+        projection_copy = projection.duplicate()
+
+        def do_it(top, middle, bottom):
+            document.setActiveNode(middle)
+            Krita.instance().action('selectopaque_add').trigger()
+            document.setActiveNode(top)
+            Krita.instance().action('clear').trigger()
+            Krita.instance().action('deselect').trigger()
+
+            document.waitForDone()
+            duplicate = top.duplicate()
+            root.addChildNode(duplicate, bottom)
+
+        Krita.instance().action('deselect').trigger()
+        for i in range(2):
+            do_it(nodes[-1], nodes[-2-i], nodes[-3-i])
+
+        root.addChildNode(projection_copy, projection)
+        projection.remove()
+
+        document.refreshProjection()
+
     def setup(self) -> None:
         """Obligatory override."""
 
@@ -88,4 +117,5 @@ class WojtrybKritaScripts(Extension):
         create_action("Backup Layer", self.backup_layer)
         create_action("Remove Hidden Layers", self.remove_hidden_layers)
         create_action("Collapse All Groups", self.collapse_all_groups)
+        create_action("Project To Layers Below", self.project_to_layers_below)
 

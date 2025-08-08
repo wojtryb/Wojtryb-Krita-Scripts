@@ -18,5 +18,10 @@
         <activationFlags>1</activationFlags>
         </Action>
 
+        <Action name="Project To Layers Below">
+        <icon></icon>
+        <activationFlags>1</activationFlags>
+        </Action>
+
     </Actions>
 </ActionCollection>
