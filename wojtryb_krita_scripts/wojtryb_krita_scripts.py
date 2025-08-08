@@ -83,13 +83,9 @@ class WojtrybKritaScripts(Extension):
         root = document.activeNode().parentNode()
         nodes = root.childNodes()
 
-        def duplicate(node):
-            copy = node.duplicate()
-            copy.setName(DUPLICATE_NAME)
-            return copy
-
         projection = nodes[-1]
-        projection_copy = duplicate(projection)
+        projection.setName(DUPLICATE_NAME)
+        projection_copy = projection.duplicate()
 
         def do_it(top, middle, bottom):
             document.setActiveNode(middle)
@@ -98,7 +94,7 @@ class WojtrybKritaScripts(Extension):
             Krita.instance().action('clear').trigger()
             Krita.instance().action('deselect').trigger()
 
-            copy = duplicate(top)
+            copy = top.duplicate()
             root.addChildNode(copy, bottom)
 
         Krita.instance().action('deselect').trigger()
