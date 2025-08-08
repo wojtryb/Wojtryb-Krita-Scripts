@@ -42,22 +42,20 @@ class WojtrybKritaScripts(Extension):
           results in removing all hidden layers in the document.
         """
         document = Krita.instance().activeDocument()
-        parent = document.activeNode().parentNode()
 
         # Start searching for the hidden layers in current scope
-        affected_groups: list[GroupLayer] = [parent]
+        groups: list[GroupLayer] = [document.activeNode().parentNode()]
 
         def remove_in_group(group: GroupLayer) -> None:
             for node in group.childNodes():
-                print(type(node))
                 if not node.visible():
                     node.remove()
                 elif isinstance(node, GroupLayer):
                     # Visible group must be searched for hidden layers 
-                    affected_groups.append(node)
+                    groups.append(node)
 
-        while affected_groups:
-            remove_in_group(affected_groups.pop())
+        while groups:
+            remove_in_group(groups.pop())
 
         document.refreshProjection()
 
