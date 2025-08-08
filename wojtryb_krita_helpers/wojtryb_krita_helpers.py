@@ -4,15 +4,17 @@
 from krita import Krita, Extension
 
 
-class BackupLayer(Extension):
-    """
-    Krita extension adding `backup layer` action.
+class WojtrybKritaHelpers(Extension):
+    """Krita extension being a collection of scripts used by wojtryb."""
 
-    The action leaves a hidden duplicate of current layer.
-    Groups are being collapsed, and name is kept without change.
-    """
+    @staticmethod
+    def backup_layer():
+        """
+        Creates a hidden backup of the current node.
 
-    def backup_layer(self):
+        When current node is a group, original gets collapsed.
+        Node above the backup gets shown and activated. 
+        """
         document = Krita.instance().activeDocument()
 
         # create node duplicate above the original
@@ -33,8 +35,8 @@ class BackupLayer(Extension):
 
     def createActions(self, window):
         """Create the action."""
-        self.action = window.createAction(
+        action = window.createAction(
             "Backup Layer", "Backup Layer", "tools/scripts")
-        self.action.setAutoRepeat(False)
-        self.action.triggered.connect(self.backup_layer)
+        action.setAutoRepeat(False)
+        action.triggered.connect(self.backup_layer)
 

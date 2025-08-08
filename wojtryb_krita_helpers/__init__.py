@@ -2,6 +2,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from krita import Krita
-from .backup_layer import BackupLayer
+from .wojtryb_krita_helpers import WojtrybKritaHelpers
 
-Krita.instance().addExtension(BackupLayer(Krita.instance()))
+Krita.instance().addExtension(WojtrybKritaHelpers(Krita.instance()))

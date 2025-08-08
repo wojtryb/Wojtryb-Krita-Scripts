@@ -1,7 +1,0 @@
-[Desktop Entry]
-Type=Service
-ServiceTypes=Krita/PythonPlugin
-X-KDE-Library=backup_layer
-X-Python-2-Compatible=false
-Name=Backup Layer
-Comment=Adds backup layer action to krita
