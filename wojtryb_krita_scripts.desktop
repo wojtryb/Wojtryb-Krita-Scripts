@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Service
 ServiceTypes=Krita/PythonPlugin
-X-KDE-Library=wojtryb_krita_helpers
+X-KDE-Library=wojtryb_krita_scripts
 X-Python-2-Compatible=false
-Name=Wojtryb Krita Helpers
+Name=Wojtryb Krita Scripts
 Comment=Collection of krita scripts used by wojtryb

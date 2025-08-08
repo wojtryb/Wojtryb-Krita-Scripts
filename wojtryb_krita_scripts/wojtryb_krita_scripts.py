@@ -6,7 +6,7 @@ from typing import Callable
 from krita import Krita, Extension, Window, GroupLayer
 
 
-class WojtrybKritaHelpers(Extension):
+class WojtrybKritaScripts(Extension):
     """Krita extension being a collection of scripts used by wojtryb."""
 
     @staticmethod

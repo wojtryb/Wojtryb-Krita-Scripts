@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ActionCollection version="2" name="Scripts">
     <Actions category="Scripts">
-        <text>Wojtryb Krita Helpers</text>
+        <text>Wojtryb Krita Scripts</text>
 
         <Action name="Backup Layer">
         <icon>duplicatelayer</icon>
