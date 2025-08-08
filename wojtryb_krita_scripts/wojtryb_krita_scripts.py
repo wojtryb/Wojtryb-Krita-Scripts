@@ -59,6 +59,22 @@ class WojtrybKritaScripts(Extension):
 
         document.refreshProjection()
 
+    @staticmethod
+    def collapse_all_groups() -> None:
+        document = Krita.instance().activeDocument()
+
+        # start searching for groups in the top level
+        groups: list[GroupLayer] = [document.rootNode()]
+
+        def collapse_in_group(group: GroupLayer) -> None:
+            for node in group.childNodes():
+                if isinstance(node, GroupLayer):
+                    node.setCollapsed(True)
+                    groups.append(node)
+
+        while groups:
+            collapse_in_group(groups.pop())
+
     def setup(self) -> None:
         """Obligatory override."""
 
@@ -71,4 +87,5 @@ class WojtrybKritaScripts(Extension):
         
         create_action("Backup Layer", self.backup_layer)
         create_action("Remove Hidden Layers", self.remove_hidden_layers)
+        create_action("Collapse All Groups", self.collapse_all_groups)
 

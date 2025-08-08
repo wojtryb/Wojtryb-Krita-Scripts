@@ -13,5 +13,10 @@
         <activationFlags>1</activationFlags>
         </Action>
 
+        <Action name="Collapse All Groups">
+        <icon>groupClosed</icon>
+        <activationFlags>1</activationFlags>
+        </Action>
+
     </Actions>
 </ActionCollection>
