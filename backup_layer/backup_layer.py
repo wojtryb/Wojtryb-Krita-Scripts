@@ -1,5 +1,7 @@
-from .api_krita import Krita, Extension
-from PyQt5.QtCore import QTimer
+# SPDX-FileCopyrightText: © 2025 Wojciech Trybus <wojtryb@gmail.com>
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+from krita import Krita, Extension
 
 
 class BackupLayer(Extension):
@@ -11,30 +13,28 @@ class BackupLayer(Extension):
     """
 
     def backup_layer(self):
-        """Create backup of current layer."""
-        Krita.trigger_action("duplicatelayer")
-        self._document = Krita.get_active_document()
-        self._original_layer = self._document.active_node
-        QTimer.singleShot(10, self._hide_layer)
+        document = Krita.instance().activeDocument()
 
-    def _hide_layer(self):
-        """Hide a stored layer, collapse it and rename new one."""
-        self._original_layer.visible = False
-        self._original_layer.collapsed = True
+        # create node duplicate above the original
+        original = document.activeNode()
+        duplicate = original.duplicate()
+        original.parentNode().addChildNode(duplicate, original)
 
-        new_layer = self._document.active_node
-        new_layer.name = self._original_layer.name
+        # Collapse and hide the original, show the duplicate
+        if original.type() == "grouplayer":
+            original.setCollapsed(True)
+        original.setVisible(False)
+        duplicate.setVisible(True)
+
+        document.refreshProjection()
 
     def setup(self):
         """Obligatory override."""
 
     def createActions(self, window):
         """Create the action."""
-        self._action = Krita.create_action(
-            window,
-            name="Backup Layer",
-            callback=self.backup_layer
-        )
+        self.action = window.createAction(
+            "Backup Layer", "Backup Layer", "tools/scripts")
+        self.action.setAutoRepeat(False)
+        self.action.triggered.connect(self.backup_layer)
 
-
-Krita.add_extension(BackupLayer)
