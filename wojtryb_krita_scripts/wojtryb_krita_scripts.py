@@ -80,23 +80,24 @@ class WojtrybKritaScripts(Extension):
         document = Krita.instance().activeDocument()
         root = document.activeNode().parentNode()
         nodes = root.childNodes()
+        current_node = nodes[-1]
 
         to_merge: list[Node] = []
 
-        def do_it(top: Node, middle: Node):
-            copy = top.duplicate()
+        def duplicate_projection_above(node: Node):
+            copy = current_node.duplicate()
             to_merge.append(copy)
-            root.addChildNode(copy, middle)
+            root.addChildNode(copy, node)
 
-            document.setActiveNode(middle)
+            document.setActiveNode(node)
             Krita.instance().action('selectopaque_add').trigger()
-            document.setActiveNode(top)
+            document.setActiveNode(current_node)
             Krita.instance().action('clear').trigger()
             Krita.instance().action('deselect').trigger()
 
         Krita.instance().action('deselect').trigger()
         for i in range(2):
-            do_it(nodes[-1], nodes[-2-i])
+            duplicate_projection_above(nodes[-2-i])
 
         for node in to_merge:
             node.mergeDown()
