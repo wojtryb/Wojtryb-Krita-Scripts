@@ -51,7 +51,7 @@ class WojtrybKritaScripts(Extension):
                 if not node.visible():
                     node.remove()
                 elif isinstance(node, GroupLayer):
-                    # Visible group must be searched for hidden layers 
+                    # Visible group must be searched for hidden layers
                     groups.append(node)
 
         while groups:
@@ -77,15 +77,13 @@ class WojtrybKritaScripts(Extension):
 
     @staticmethod
     def project_to_layers_below():
-        DUPLICATE_NAME = "_projection_to_merge"
-
         document = Krita.instance().activeDocument()
         root = document.activeNode().parentNode()
         nodes = root.childNodes()
 
         projection = nodes[-1]
-        projection.setName(DUPLICATE_NAME)
         projection_copy = projection.duplicate()
+        to_merge = [projection_copy]
 
         def do_it(top, middle, bottom):
             document.setActiveNode(middle)
@@ -95,6 +93,7 @@ class WojtrybKritaScripts(Extension):
             Krita.instance().action('deselect').trigger()
 
             copy = top.duplicate()
+            to_merge.append(copy)
             root.addChildNode(copy, bottom)
 
         Krita.instance().action('deselect').trigger()
@@ -103,6 +102,9 @@ class WojtrybKritaScripts(Extension):
 
         root.addChildNode(projection_copy, projection)
         projection.remove()
+
+        for node in to_merge:
+            node.mergeDown()
 
         document.refreshProjection()
 
@@ -115,9 +117,8 @@ class WojtrybKritaScripts(Extension):
             action = window.createAction(name, name, "tools/scripts")
             action.setAutoRepeat(False)
             action.triggered.connect(callback)
-        
+
         create_action("Backup Layer", self.backup_layer)
         create_action("Remove Hidden Layers", self.remove_hidden_layers)
         create_action("Collapse All Groups", self.collapse_all_groups)
         create_action("Project To Layers Below", self.project_to_layers_below)
-
