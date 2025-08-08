@@ -1,14 +1,16 @@
 # SPDX-FileCopyrightText: © 2025 Wojciech Trybus <wojtryb@gmail.com>
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from krita import Krita, Extension
+from typing import Callable
+
+from krita import Krita, Extension, Window
 
 
 class WojtrybKritaHelpers(Extension):
     """Krita extension being a collection of scripts used by wojtryb."""
 
     @staticmethod
-    def backup_layer():
+    def backup_layer() -> None:
         """
         Creates a hidden backup of the current node.
 
@@ -30,13 +32,15 @@ class WojtrybKritaHelpers(Extension):
 
         document.refreshProjection()
 
-    def setup(self):
+    def setup(self) -> None:
         """Obligatory override."""
 
-    def createActions(self, window):
-        """Create the action."""
-        action = window.createAction(
-            "Backup Layer", "Backup Layer", "tools/scripts")
-        action.setAutoRepeat(False)
-        action.triggered.connect(self.backup_layer)
+    def createActions(self, window: Window) -> None:
+        """Create every plugin action."""
+        def create_action(name: str, callback: Callable[[], None]):
+            action = window.createAction(name, name, "tools/scripts")
+            action.setAutoRepeat(False)
+            action.triggered.connect(callback)
+        
+        create_action("Backup Layer", self.backup_layer)
 
