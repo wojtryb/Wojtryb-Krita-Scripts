@@ -3,7 +3,7 @@
 
 from typing import Callable
 
-from krita import Krita, Extension, Window, GroupLayer
+from krita import Krita, Extension, Window, GroupLayer, Node
 
 
 class WojtrybKritaScripts(Extension):
@@ -15,7 +15,7 @@ class WojtrybKritaScripts(Extension):
         Creates a hidden backup of the current node.
 
         When current node is a group, original gets collapsed.
-        Node above the backup gets shown and activated. 
+        Node above the backup gets shown and activated.
         """
         document = Krita.instance().activeDocument()
 
@@ -37,7 +37,7 @@ class WojtrybKritaScripts(Extension):
         """
         Remove all hidden layers in the group of active layer.
 
-        - Hidden layers inside the subgroups are also removed.         
+        - Hidden layers inside the subgroups are also removed.
         - Running the script when active layer is not inside any group,
           results in removing all hidden layers in the document.
         """
@@ -76,32 +76,27 @@ class WojtrybKritaScripts(Extension):
             collapse_in_group(groups.pop())
 
     @staticmethod
-    def project_to_layers_below():
+    def project_to_layers_below() -> None:
         document = Krita.instance().activeDocument()
         root = document.activeNode().parentNode()
         nodes = root.childNodes()
 
-        projection = nodes[-1]
-        projection_copy = projection.duplicate()
-        to_merge = [projection_copy]
+        to_merge: list[Node] = []
 
-        def do_it(top, middle, bottom):
+        def do_it(top: Node, middle: Node):
+            copy = top.duplicate()
+            to_merge.append(copy)
+            root.addChildNode(copy, middle)
+
             document.setActiveNode(middle)
             Krita.instance().action('selectopaque_add').trigger()
             document.setActiveNode(top)
             Krita.instance().action('clear').trigger()
             Krita.instance().action('deselect').trigger()
 
-            copy = top.duplicate()
-            to_merge.append(copy)
-            root.addChildNode(copy, bottom)
-
         Krita.instance().action('deselect').trigger()
         for i in range(2):
-            do_it(nodes[-1], nodes[-2-i], nodes[-3-i])
-
-        root.addChildNode(projection_copy, projection)
-        projection.remove()
+            do_it(nodes[-1], nodes[-2-i])
 
         for node in to_merge:
             node.mergeDown()
