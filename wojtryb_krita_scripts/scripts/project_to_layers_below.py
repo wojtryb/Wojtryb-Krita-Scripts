@@ -6,28 +6,31 @@ from collections import deque
 from krita import Krita, Node, GroupLayer
 
 
-def _display_popup(message: str):
+def _display_popup(message: str) -> None:
+    """Display a message in top-left corner of screen."""
     view = Krita.instance().activeWindow().activeView()
     view.showFloatingMessage(
         message, Krita.instance().icon("merge-layer-below"), 3000, 1)
 
 
-def _find_root(active_node: Node) -> Node:
-    root = active_node.parentNode()
+def _find_root(node: Node) -> Node:
+    """Return a root of given node, considering pass-through mode."""
+    root = node.parentNode()
     while type(root) is GroupLayer and root.passThroughMode():
         root = root.parentNode()
     return root
 
 
-def _find_nodes(active_node: Node) -> list[Node]:
-    root = _find_root(active_node)
+def _find_nodes_below(threshold: Node) -> list[Node]:
+    """Return flattened list of visible nodes below given threshold."""
+    root = _find_root(threshold)
 
     queue: deque[Node] = deque(root.childNodes())
     output: list[Node] = []
 
     while queue:
         node = queue.popleft()
-        if node == active_node:
+        if node == threshold:
             break
         elif not node.visible():
             continue
@@ -40,6 +43,21 @@ def _find_nodes(active_node: Node) -> list[Node]:
 
 
 def project_to_layers_below() -> None:
+    """
+    Merge a projection of active layer to each underlying node in group.
+
+    - Works only when active node is a visible, unlocked paint layer.
+    - Affects visible layers below current one, inside the same group.
+    - Goes out of the current group, if it is in pass-through mode.
+    - Recursively goes inside the sub-groups.
+    - Locked layers are not affected, but can cover layers underneath.
+
+    NOTE: script results in deselecting the current selection.
+    NOTE: script creates multiple entries in the undo stack.
+          Undoing the script outcome can be impossible.
+    NOTE: Settings > Configure Krita > General > Window > Show on-canvas
+          popup settings must be on for displaying the script progress.
+    """
     document = Krita.instance().activeDocument()
     active_node = document.activeNode()
 
@@ -49,11 +67,11 @@ def project_to_layers_below() -> None:
         _display_popup("Current layer cannot be used as projection")
         return
 
-    nodes = _find_nodes(active_node)
+    nodes = _find_nodes_below(active_node)
 
     to_merge: list[Node] = []
 
-    def duplicate_projection_above(node: Node):
+    def duplicate_projection_above(node: Node) -> None:
         if not node.locked():
             copy = active_node.duplicate()
             copy.setInheritAlpha(True)
