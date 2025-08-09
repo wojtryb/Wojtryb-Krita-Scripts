@@ -1,6 +1,8 @@
 # SPDX-FileCopyrightText: © 2025 Wojciech Trybus <wojtryb@gmail.com>
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from collections import deque
+
 from krita import Krita, Node, GroupLayer
 
 
@@ -12,31 +14,28 @@ def _find_root(active_node: Node) -> Node:
 
 
 def _find_nodes(active_node: Node, root: Node) -> list[Node]:
-    def walk(root: Node) -> tuple[list[Node], bool]:
-        output: list[Node] = []
-        for node in root.childNodes():
-            if not node.visible():
-                continue
-            if node == active_node:
-                return output, True
-            if type(node) is Node:  # Paint layer, not its subclass
-                output.append(node)
-            elif isinstance(node, GroupLayer):
-                nodes, is_end = walk(node)
-                output.extend(nodes)
-                if is_end:
-                    return output, True
-        return output, False
+    queue: deque[Node] = deque(root.childNodes())
+    output: list[Node] = []
 
-    nodes, _ = walk(root)
-    return nodes
+    while queue:
+        node = queue.popleft()
+        if node == active_node:
+            break
+        elif not node.visible():
+            continue
+        elif type(node) is Node:  # Paint layer, not its subclass
+            output.append(node)
+        elif isinstance(node, GroupLayer):
+            queue.extendleft(reversed(node.childNodes()))
+
+    return output
 
 
 def project_to_layers_below() -> None:
     document = Krita.instance().activeDocument()
     active_node = document.activeNode()
 
-    if type(active_node) is not Node or not active_node.visible:
+    if type(active_node) is not Node or not active_node.visible():
         return
 
     root = _find_root(active_node)
