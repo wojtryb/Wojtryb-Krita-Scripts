@@ -3,106 +3,17 @@
 
 from typing import Callable
 
-from krita import Krita, Extension, Window, GroupLayer, Node
+from krita import Extension, Window
+
+from .scripts import (
+    backup_layer,
+    collapse_all_groups,
+    project_to_layers_below,
+    remove_hidden_layers)
 
 
 class WojtrybKritaScripts(Extension):
     """Krita extension being a collection of scripts used by wojtryb."""
-
-    @staticmethod
-    def backup_layer() -> None:
-        """
-        Creates a hidden backup of the current node.
-
-        When current node is a group, original gets collapsed.
-        Node above the backup gets shown and activated.
-        """
-        document = Krita.instance().activeDocument()
-
-        # create node duplicate above the original
-        original = document.activeNode()
-        duplicate = original.duplicate()
-        original.parentNode().addChildNode(duplicate, original)
-
-        # Collapse and hide the original, show the duplicate
-        if isinstance(original, GroupLayer):
-            original.setCollapsed(True)
-        original.setVisible(False)
-        duplicate.setVisible(True)
-
-        document.refreshProjection()
-
-    @staticmethod
-    def remove_hidden_layers() -> None:
-        """
-        Remove all hidden layers in the group of active layer.
-
-        - Hidden layers inside the subgroups are also removed.
-        - Running the script when active layer is not inside any group,
-          results in removing all hidden layers in the document.
-        """
-        document = Krita.instance().activeDocument()
-
-        # Start searching for the hidden layers in current scope
-        groups: list[GroupLayer] = [document.activeNode().parentNode()]
-
-        def remove_in_group(group: GroupLayer) -> None:
-            for node in group.childNodes():
-                if not node.visible():
-                    node.remove()
-                elif isinstance(node, GroupLayer):
-                    # Visible group must be searched for hidden layers
-                    groups.append(node)
-
-        while groups:
-            remove_in_group(groups.pop())
-
-        document.refreshProjection()
-
-    @staticmethod
-    def collapse_all_groups() -> None:
-        document = Krita.instance().activeDocument()
-
-        # start searching for groups in the top level
-        groups: list[GroupLayer] = [document.rootNode()]
-
-        def collapse_in_group(group: GroupLayer) -> None:
-            for node in group.childNodes():
-                if isinstance(node, GroupLayer):
-                    node.setCollapsed(True)
-                    groups.append(node)
-
-        while groups:
-            collapse_in_group(groups.pop())
-
-    @staticmethod
-    def project_to_layers_below() -> None:
-        document = Krita.instance().activeDocument()
-        root = document.activeNode().parentNode()
-        nodes = root.childNodes()
-        current_node = nodes[-1]
-
-        to_merge: list[Node] = []
-
-        def duplicate_projection_above(node: Node):
-            copy = current_node.duplicate()
-            to_merge.append(copy)
-            root.addChildNode(copy, node)
-
-            document.setActiveNode(node)
-            Krita.instance().action('selectopaque_add').trigger()
-            document.setActiveNode(current_node)
-            Krita.instance().action('clear').trigger()
-            Krita.instance().action('deselect').trigger()
-
-        Krita.instance().action('deselect').trigger()
-        for i in range(2):
-            duplicate_projection_above(nodes[-2-i])
-
-        for node in to_merge:
-            node.mergeDown()
-
-        document.refreshProjection()
 
     def setup(self) -> None:
         """Obligatory override."""
@@ -114,7 +25,7 @@ class WojtrybKritaScripts(Extension):
             action.setAutoRepeat(False)
             action.triggered.connect(callback)
 
-        create_action("Backup Layer", self.backup_layer)
-        create_action("Remove Hidden Layers", self.remove_hidden_layers)
-        create_action("Collapse All Groups", self.collapse_all_groups)
-        create_action("Project To Layers Below", self.project_to_layers_below)
+        create_action("Backup Layer", backup_layer)
+        create_action("Collapse All Groups", collapse_all_groups)
+        create_action("Project To Layers Below", project_to_layers_below)
+        create_action("Remove Hidden Layers", remove_hidden_layers)
