@@ -15,6 +15,8 @@ def _find_nodes(active_node: Node, root: Node) -> list[Node]:
     def walk(root: Node) -> tuple[list[Node], bool]:
         output: list[Node] = []
         for node in root.childNodes():
+            if not node.visible():
+                continue
             if node == active_node:
                 return output, True
             if type(node) is Node:  # Paint layer, not its subclass
@@ -33,6 +35,9 @@ def _find_nodes(active_node: Node, root: Node) -> list[Node]:
 def project_to_layers_below() -> None:
     document = Krita.instance().activeDocument()
     active_node = document.activeNode()
+
+    if type(active_node) is not Node or not active_node.visible:
+        return
 
     root = _find_root(active_node)
     nodes = _find_nodes(active_node, root)
