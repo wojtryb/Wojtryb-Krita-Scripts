@@ -19,7 +19,7 @@ def backup_layer() -> None:
     original.parentNode().addChildNode(duplicate, original)
 
     # Collapse and hide the original, show the duplicate
-    if isinstance(original, GroupLayer):
+    if type(original) is GroupLayer:
         original.setCollapsed(True)
     original.setVisible(False)
     duplicate.setVisible(True)

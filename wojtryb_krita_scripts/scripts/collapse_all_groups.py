@@ -12,7 +12,7 @@ def collapse_all_groups() -> None:
 
     def collapse_in_group(group: GroupLayer) -> None:
         for node in group.childNodes():
-            if isinstance(node, GroupLayer):
+            if type(node) is GroupLayer:
                 node.setCollapsed(True)
                 groups.append(node)
 

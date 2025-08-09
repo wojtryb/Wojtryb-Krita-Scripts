@@ -8,7 +8,7 @@ from krita import Krita, Node, GroupLayer
 
 def _find_root(active_node: Node) -> Node:
     root = active_node.parentNode()
-    while isinstance(root, GroupLayer) and root.passThroughMode():
+    while type(root) is GroupLayer and root.passThroughMode():
         root = root.parentNode()
     return root
 
@@ -23,9 +23,9 @@ def _find_nodes(active_node: Node, root: Node) -> list[Node]:
             break
         elif not node.visible():
             continue
-        elif type(node) is Node:  # Paint layer, not its subclass
+        elif type(node) is Node:
             output.append(node)
-        elif isinstance(node, GroupLayer):
+        elif type(node) is GroupLayer:
             queue.extendleft(reversed(node.childNodes()))
 
     return output

@@ -22,7 +22,7 @@ def remove_hidden_layers() -> None:
         for node in group.childNodes():
             if not node.visible():
                 node.remove()
-            elif isinstance(node, GroupLayer):
+            elif type(node) is GroupLayer:
                 # Visible group must be searched for hidden layers
                 groups.append(node)
 
