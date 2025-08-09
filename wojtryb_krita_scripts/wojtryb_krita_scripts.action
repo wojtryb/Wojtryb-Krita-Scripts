@@ -19,7 +19,7 @@
         </Action>
 
         <Action name="Project To Layers Below">
-        <icon></icon>
+        <icon>merge-layer-below</icon>
         <activationFlags>1</activationFlags>
         </Action>
 
