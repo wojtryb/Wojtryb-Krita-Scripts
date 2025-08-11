@@ -8,8 +8,8 @@
         <activationFlags>1</activationFlags>
         </Action>
 
-        <Action name="Remove Hidden Layers">
-        <icon>deletelayer</icon>
+        <Action name="Change Collapse State">
+        <icon>groupClosed</icon>
         <activationFlags>1</activationFlags>
         </Action>
 
@@ -20,6 +20,11 @@
 
         <Action name="Project To Layers Below">
         <icon>merge-layer-below</icon>
+        <activationFlags>1</activationFlags>
+        </Action>
+
+        <Action name="Remove Hidden Layers">
+        <icon>deletelayer</icon>
         <activationFlags>1</activationFlags>
         </Action>
 

@@ -7,6 +7,7 @@ from krita import Extension, Window
 
 from .scripts import (
     backup_layer,
+    change_collapse_state,
     collapse_all_groups,
     project_to_layers_below,
     remove_hidden_layers)
@@ -26,6 +27,7 @@ class WojtrybKritaScripts(Extension):
             action.triggered.connect(callback)
 
         create_action("Backup Layer", backup_layer)
+        create_action("Change Collapse State", change_collapse_state)
         create_action("Collapse All Groups", collapse_all_groups)
         create_action("Project To Layers Below", project_to_layers_below)
         create_action("Remove Hidden Layers", remove_hidden_layers)
