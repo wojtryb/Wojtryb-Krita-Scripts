@@ -21,8 +21,14 @@ def _find_root(node: Node) -> Node:
     return root
 
 
-def _find_nodes_below(threshold: Node) -> list[Node]:
-    """Return flattened list of visible nodes below given threshold."""
+def _find_nodes_below(threshold: Node) -> list[Node] | None:
+    """
+    Return flattened list of visible nodes below given threshold.
+
+    Return None when any node is locked or in inherit-alpha mode.
+    It must be done here as group layers also can be locked, and this
+    information would get lost in a returned list.
+    """
     root = _find_root(threshold)
 
     queue: deque[Node] = deque(root.childNodes())
@@ -34,6 +40,9 @@ def _find_nodes_below(threshold: Node) -> list[Node]:
             break
         elif not node.visible():
             continue
+        elif node.locked() or node.inheritAlpha():
+            _display_popup("Hide any locked or inherit-alpha layers")
+            return None
         elif type(node) is Node:
             output.append(node)
         elif type(node) is GroupLayer:
@@ -50,7 +59,6 @@ def project_to_layers_below() -> None:
     - Affects visible layers below current one, inside the same group.
     - Goes out of the current group, if it is in pass-through mode.
     - Recursively goes inside the sub-groups.
-    - Locked layers are not affected, but can cover layers underneath.
     - If active node had inherit-alpha turned on, it gets deleted
 
     NOTE: script results in deselecting the current selection.
@@ -65,24 +73,24 @@ def project_to_layers_below() -> None:
     if type(active_node) is not Node \
             or not active_node.visible() \
             or active_node.locked():
-        _display_popup("Current layer cannot be used as projection")
+        _display_popup("Current layer cannot be used as a projection")
         return
 
     nodes = _find_nodes_below(active_node)
+    if nodes is None:
+        return
 
     to_merge: list[Node] = []
 
     def duplicate_projection_above(node: Node) -> None:
-        if not node.locked():
-            copy = active_node.duplicate()
-            copy.setInheritAlpha(True)
-            to_merge.append(copy)
-            node.parentNode().addChildNode(copy, node)
+        copy = active_node.duplicate()
+        copy.setInheritAlpha(True)
+        to_merge.append(copy)
+        node.parentNode().addChildNode(copy, node)
 
         document.setActiveNode(node)
         Krita.instance().action('selectopaque').trigger()
         document.setActiveNode(active_node)
-        document.waitForDone()
         Krita.instance().action('clear').trigger()
         document.waitForDone()
         Krita.instance().action('deselect').trigger()
