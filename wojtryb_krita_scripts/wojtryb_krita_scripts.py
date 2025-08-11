@@ -7,11 +7,11 @@ from krita import Extension, Window
 
 from .scripts import (
     backup_layer,
-    change_collapse_state,
     collapse_all_groups,
     flatten_inherit_alpha,
     project_to_layers_below,
-    remove_hidden_layers)
+    remove_hidden_layers,
+    toggle_layer_collapse)
 
 
 class WojtrybKritaScripts(Extension):
@@ -28,8 +28,8 @@ class WojtrybKritaScripts(Extension):
             action.triggered.connect(callback)
 
         create_action("Backup Layer", backup_layer)
-        create_action("Change Collapse State", change_collapse_state)
         create_action("Collapse All Groups", collapse_all_groups)
         create_action("Flatten Inherit Alpha", flatten_inherit_alpha)
         create_action("Project To Layers Below", project_to_layers_below)
         create_action("Remove Hidden Layers", remove_hidden_layers)
+        create_action("Toggle Layer Collapse", toggle_layer_collapse)
