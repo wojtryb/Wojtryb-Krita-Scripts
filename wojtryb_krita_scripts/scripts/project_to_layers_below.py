@@ -51,6 +51,7 @@ def project_to_layers_below() -> None:
     - Goes out of the current group, if it is in pass-through mode.
     - Recursively goes inside the sub-groups.
     - Locked layers are not affected, but can cover layers underneath.
+    - If active node had inherit-alpha turned on, it gets deleted
 
     NOTE: script results in deselecting the current selection.
     NOTE: script creates multiple entries in the undo stack.
@@ -96,6 +97,9 @@ def project_to_layers_below() -> None:
     for i, node in enumerate(to_merge, 1):
         _display_popup(f"Merging layers: {i}/{len(nodes)}")
         node.mergeDown()
+
+    if active_node.inheritAlpha():
+        active_node.remove()
 
     document.refreshProjection()
     _display_popup("Done!")
