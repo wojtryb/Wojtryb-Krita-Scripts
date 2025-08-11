@@ -18,6 +18,11 @@
         <activationFlags>1</activationFlags>
         </Action>
 
+        <Action name="Flatten Inherit Alpha">
+        <icon>transparency-enabled</icon>
+        <activationFlags>1</activationFlags>
+        </Action>
+
         <Action name="Project To Layers Below">
         <icon>merge-layer-below</icon>
         <activationFlags>1</activationFlags>
