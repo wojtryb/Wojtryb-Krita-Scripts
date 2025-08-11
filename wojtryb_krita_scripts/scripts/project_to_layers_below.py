@@ -55,17 +55,26 @@ def project_to_layers_below() -> None:
     """
     Merge a projection of active layer to each underlying node in group.
 
-    - Works only when active node is a visible, unlocked paint layer.
+    Usage guide:
+
+    - Works only when active layer is a visible, unlocked paint layer.
     - Affects visible layers below current one, inside the same group.
     - Goes out of the current group, if it is in pass-through mode.
     - Recursively goes inside the sub-groups.
-    - If active node had inherit-alpha turned on, it gets deleted
+    - Requires no locked or inherit-alpha layers inside the scope.
+    - If active layer was not in inherit-alpha mode, remaining content
+      takes place of the original layer.
 
-    NOTE: script results in deselecting the current selection.
-    NOTE: script creates multiple entries in the undo stack.
-          Undoing the script outcome can be impossible.
-    NOTE: Settings > Configure Krita > General > Window > Show on-canvas
-          popup settings must be on for displaying the script progress.
+    > Warning: The script modifies content of multiple layers. Undoing
+      it with `ctrl+Z` may not be possible, as it creates multiple
+      entries in the undo stack. Ideally, save the document before using
+      this script.
+
+    > Note: If `Settings > Configure Krita > General > Window >
+      Show on-canvas popup settings` is turned off, the script will not
+      show its progress.
+
+    > Note: Script results in deselecting the current selection.
     """
     document = Krita.instance().activeDocument()
     active_node = document.activeNode()

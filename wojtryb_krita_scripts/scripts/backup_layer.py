@@ -6,7 +6,7 @@ from krita import Krita
 
 def backup_layer() -> None:
     """
-    Creates a hidden backup of the current node.
+    Creates a hidden copy of the active layer below it.
 
     When current node is a group, original gets collapsed.
     Node above the backup gets shown and activated.

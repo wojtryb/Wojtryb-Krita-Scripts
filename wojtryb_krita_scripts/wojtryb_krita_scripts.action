@@ -8,11 +8,6 @@
         <activationFlags>1</activationFlags>
         </Action>
 
-        <Action name="Change Collapse State">
-        <icon>groupClosed</icon>
-        <activationFlags>1</activationFlags>
-        </Action>
-
         <Action name="Collapse All Groups">
         <icon>groupClosed</icon>
         <activationFlags>1</activationFlags>
@@ -30,6 +25,11 @@
 
         <Action name="Remove Hidden Layers">
         <icon>deletelayer</icon>
+        <activationFlags>1</activationFlags>
+        </Action>
+
+        <Action name="Toggle Layer Collapse">
+        <icon>groupClosed</icon>
         <activationFlags>1</activationFlags>
         </Action>
 

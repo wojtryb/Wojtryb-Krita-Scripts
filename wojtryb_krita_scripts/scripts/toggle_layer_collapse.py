@@ -6,11 +6,11 @@ from krita import Krita
 
 def toggle_layer_collapse() -> None:
     """
-    Collapse or expand current group.
+    Collapse or expand current node.
 
     If current node has no children, its parent is toggled instead.
-    Collapsing a group activates it.
-    Expanding a group activates its topmost child.
+    Collapsing a node activates it.
+    Expanding a node activates its topmost child.
     """
     document = Krita.instance().activeDocument()
     active = document.activeNode()
