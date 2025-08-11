@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: © 2025 Wojciech Trybus <wojtryb@gmail.com>
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from krita import Krita, GroupLayer
+from krita import Krita
 
 
 def backup_layer() -> None:
@@ -19,7 +19,7 @@ def backup_layer() -> None:
     original.parentNode().addChildNode(duplicate, original)
 
     # Collapse and hide the original, show the duplicate
-    if type(original) is GroupLayer:
+    if original.childNodes():
         original.setCollapsed(True)
     original.setVisible(False)
     duplicate.setVisible(True)
