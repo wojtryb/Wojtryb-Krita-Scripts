@@ -100,8 +100,10 @@ def project_to_layers_below() -> None:
         document.setActiveNode(node)
         Krita.instance().action('selectopaque').trigger()
         document.setActiveNode(active_node)
-        Krita.instance().action('clear').trigger()
         document.waitForDone()
+        if document.selection() is not None:
+            Krita.instance().action('clear').trigger()
+            document.waitForDone()
         Krita.instance().action('deselect').trigger()
         document.waitForDone()
 
