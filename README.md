@@ -1,4 +1,4 @@
-# Wojtryb Krita Scripts **v1.0.0**
+# Wojtryb Krita Scripts **v1.0.1**
 
 [![python](https://img.shields.io/badge/Python-3.10-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org)
 [![License: GPLv3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
