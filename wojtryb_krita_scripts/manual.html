@@ -1,0 +1,81 @@
+<h1 id="wojtryb-krita-scripts-v1-0-0-">Wojtryb Krita Scripts <strong>v1.0.0</strong></h1>
+<p>Collection of miscellaneous scripts for painting application <strong><code>Krita</code></strong>. They can be
+    installed separately or as a single plugin.</p>
+<p>The scripts available in this repository:</p>
+<ul>
+    <li>Project to layers below</li>
+    <li>Backup layer</li>
+    <li>Remove hidden layers</li>
+    <li>Toggle layer collapse</li>
+</ul>
+<h2 id="requirements">Requirements</h2>
+<ul>
+    <li>Version of krita on plugin release: <strong>5.2.11</strong></li>
+    <li>Required version of krita: <strong>5.2.0</strong> or later</li>
+</ul>
+<p>OS support state:</p>
+<ul>
+    <li>[x] Windows</li>
+    <li>[x] Linux</li>
+    <li>[X] MacOS</li>
+    <li>[ ] Android (Does not support python plugins yet)</li>
+</ul>
+<h2 id="scripts">Scripts</h2>
+<h3 id="project-to-layers-below">Project to layers below</h3>
+<p>Merges a projection of active layer to each underlying node in group.</p>
+<p>Usage guide:</p>
+<ul>
+    <li>Works only when active layer is a visible, unlocked paint layer.</li>
+    <li>Affects visible layers below current one, inside the same group.</li>
+    <li>Goes out of the current group, if it is in pass-through mode.</li>
+    <li>Recursively goes inside the sub-groups.</li>
+    <li>Requires no locked or inherit-alpha layers inside the scope.</li>
+    <li>If active layer was not in inherit-alpha mode, remaining content takes place of the original layer.</li>
+</ul>
+<blockquote>
+    <p>Warning: The script modifies content of multiple layers. Undoing it with <code>ctrl+Z</code> may not be possible,
+        as it creates multiple entries in the undo stack. Ideally, save the document before using this script.</p>
+    <p>Note: If <code>Settings &gt; Configure Krita &gt; General &gt; Window &gt; Show on-canvas popup settings</code>
+        is turned off, the script will not show its progress.</p>
+    <p>Note: Script results in deselecting the current selection.</p>
+</blockquote>
+<h3 id="backup-layer">Backup layer</h3>
+<p>Creates a hidden copy of the active layer below it. Makes it easier to create a history of a single layer and compare
+    changes done to it.</p>
+<h3 id="remove-hidden-layers">Remove hidden layers</h3>
+<p>Removes all hidden layers in the group of active layer. Hidden layers inside the subgroups are also removed. Running
+    the script when active layer is not inside any group, results in removing all hidden layers in the document.</p>
+<p>Can be used to remove layer history created with <code>Backup layer</code> script.</p>
+<h3 id="toggle-layer-collapse">Toggle layer collapse</h3>
+<p>Collapse or expand current layer. If current layer has no children, its parent is toggled instead.</p>
+<p>Collapsing a layer activates it. Expanding a layer activates its topmost child.</p>
+<h2 id="how-to-install-or-update">How to install or update</h2>
+<p>Scripts can be installed separately using krita&#39;s <code>Ten Scripts</code> native plugin, or as a standallone
+    plugin.</p>
+<h3 id="install-a-single-script">Install a single script</h3>
+<ol>
+    <li>Pick and download chosen script from the repository.</li>
+    <li>In krita, go to <code>Tools &gt; Scripts &gt; Ten Scripts</code>.</li>
+    <li>Use <code>...</code> button to assign the script to a keyboard shortcut. Select a path to *.py file you
+        downloaded.</li>
+</ol>
+<h3 id="install-as-a-plugin">Install as a plugin</h3>
+<p>Installation steps are the same for installing the plugin for the first time and for updating it to the new version:
+</p>
+<ol>
+    <li>Download the plugin.</li>
+    <li>In krita&#39;s topbar, open <strong>Tools &gt; Scripts &gt; Import Python Plugin From File</strong> and pick the
+        downloaded .zip file.</li>
+    <li>Restart krita.</li>
+</ol>
+<p>Scripts can be accessed from <code>Tools &gt; Scripts</code> menu.</p>
+<p>You can also set custom shortcuts in <strong>Settings &gt; Configure Krita &gt; Keyboard Shortcuts</strong> under
+    <strong>Scripts &gt;Wojtryb Krita Scripts</strong> section. By intention, there are no default bindings.
+</p>
+<blockquote>
+    <p><strong>Warning</strong>
+        Some keyboard buttons like <strong>Space, R, Y, V, 1, 2, 3, 4, 5, 6</strong> are reserved for Krita&#39;s Canvas
+        Inputs. Assigning those keys to actions (including those from the plugin) may result in conflicts and abnormal
+        behavior different for each OS. Either avoid those keys, or remove their bindings in <strong>Settings &gt;
+            Configure Krita &gt; Canvas Input Settings</strong>.</p>
+</blockquote>

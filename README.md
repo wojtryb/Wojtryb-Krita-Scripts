@@ -75,7 +75,7 @@ Scripts can be installed separately using krita's `Ten Scripts` native plugin, o
 
 1. Pick and download chosen script from [the repository](https://github.com/wojtryb/Wojtryb-Krita-Scripts/tree/main/wojtryb_krita_scripts/scripts).
    <img alt="Screenshot_20250811_121247-edit" src="https://github.com/user-attachments/assets/41a6ae2f-e9ca-44f3-9ab9-4208f0e9049e" />
-2. In krita, go to `Tools > Scripts > Ten Scripts`
+2. In krita, go to `Tools > Scripts > Ten Scripts`.
 3. Use `...` button to assign the script to a keyboard shortcut. Select a path to *.py file you downloaded.
 
 ### Install as a plugin

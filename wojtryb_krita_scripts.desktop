@@ -3,5 +3,6 @@ Type=Service
 ServiceTypes=Krita/PythonPlugin
 X-KDE-Library=wojtryb_krita_scripts
 X-Python-2-Compatible=false
+X-Krita-Manual=manual.html
 Name=Wojtryb Krita Scripts
 Comment=Collection of krita scripts used by wojtryb
