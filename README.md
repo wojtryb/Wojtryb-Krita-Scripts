@@ -45,7 +45,7 @@ Usage guide:
 - Requires no locked or inherit-alpha layers inside the scope.
 - If active layer was not in inherit-alpha mode, remaining content takes place of the original layer.
 
-> Warning: The script modifies content of multiple layers. Undoing it with `ctrl+Z` may not be possible, as it creates multiple entries in the undo stack. Ideally, save the document before using this script.
+> Warning: The script modifies content of multiple layers. Undoing it with `ctrl+z` may not be possible, as it creates multiple entries in the undo stack. Ideally, save the document before using this script.
 
 > Note: If `Settings > Configure Krita > General > Window > Show on-canvas popup settings` is turned off, the script will not show its progress.
 
@@ -69,7 +69,7 @@ Collapsing a layer activates it. Expanding a layer activates its topmost child.
 
 ## How to install or update
 
-Scripts can be installed separately using krita's `Ten Scripts` native plugin, or as a standallone plugin.
+Scripts can be installed separately using krita's `Ten Scripts` native plugin, or as a standalone plugin.
 
 ### Install a single script
 
