@@ -55,6 +55,8 @@ Usage guide:
 
 Creates a hidden copy of the active layer below it. Makes it easier to create a history of a single layer and compare changes done to it.
 
+It is not possible to affect multiple layers at once by selecting them with `ctrl` or `shift` in the layer stack. It can be achieved only by running the script on the group.
+
 ### Remove hidden layers
 
 Removes all hidden layers in the group of active layer. Hidden layers inside the subgroups are also removed. Running the script when active layer is not inside any group, results in removing all hidden layers in the document.

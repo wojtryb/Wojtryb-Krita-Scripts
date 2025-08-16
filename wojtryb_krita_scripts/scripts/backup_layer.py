@@ -10,6 +10,10 @@ def backup_layer() -> None:
 
     When duplicated node is a group, backup gets collapsed.
     Node above the backup gets shown and remains activated.
+
+    NOTE: it is not possible to affect multiple layers at once by
+    selecting them with `ctrl` or `shift` in the layer stack.
+    It can be achieved only by running the script on the group.
     """
     document = Krita.instance().activeDocument()
 
