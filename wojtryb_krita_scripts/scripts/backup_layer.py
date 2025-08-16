@@ -8,21 +8,35 @@ def backup_layer() -> None:
     """
     Creates a hidden copy of the active layer below it.
 
-    When current node is a group, original gets collapsed.
-    Node above the backup gets shown and activated.
+    When duplicated node is a group, backup gets collapsed.
+    Node above the backup gets shown and remains activated.
     """
     document = Krita.instance().activeDocument()
 
-    # create node duplicate above the original
     original = document.activeNode()
-    duplicate = original.duplicate()
-    original.parentNode().addChildNode(duplicate, original)
 
-    # Collapse and hide the original, show the duplicate
+    # Make sure the original is not visible
+    if original.visible():
+        Krita.instance().action("toggle_layer_visibility").trigger()
+        document.waitForDone()
+
+    # Create node duplicate above the original
+    Krita.instance().action("duplicatelayer").trigger()
+    document.waitForDone()
+
+    # Find the duplicate created by action call
+    parent = original.parentNode()
+    children = parent.childNodes()
+    index = children.index(original)
+    duplicate = children[index+1]
+
+    # Make the duplicate visible and rename it
+    duplicate.setVisible(True)
+    duplicate.setName(original.name())
+
+    # Collapse the original
     if original.childNodes():
         original.setCollapsed(True)
-    original.setVisible(False)
-    duplicate.setVisible(True)
 
     document.refreshProjection()
 
